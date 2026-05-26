@@ -8,27 +8,35 @@ export default function Home() {
   const [results, setResults] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+  const API_URL =
+    "https://shadowtrace-agent.onrender.com";
+
   const startScan = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/scan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          username,
-        }),
-      });
+      const response = await fetch(
+        `${API_URL}/scan`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            username,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       setResults(data);
 
     } catch (error) {
+
       console.error(error);
+
       alert("Backend connection failed.");
     }
 
@@ -40,7 +48,7 @@ export default function Home() {
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8000/approve-report",
+        `${API_URL}/approve-report`,
         {
           method: "POST",
         }
@@ -179,14 +187,12 @@ export default function Home() {
 
                 {results.services.map(
                   (service: string, index: number) => (
-
                     <span
                       key={index}
                       className="bg-red-600 px-4 py-2 rounded-full"
                     >
                       {service}
                     </span>
-
                   )
                 )}
 
@@ -216,11 +222,9 @@ export default function Home() {
 
                 {results.recommendations.map(
                   (item: string, index: number) => (
-
                     <li key={index}>
                       • {item}
                     </li>
-
                   )
                 )}
 
@@ -238,11 +242,9 @@ export default function Home() {
 
                 {results.agent_steps.map(
                   (step: string, index: number) => (
-
                     <li key={index}>
                       ✓ {step}
                     </li>
-
                   )
                 )}
 
